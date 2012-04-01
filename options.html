@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>Appbox Extension Settings</title>
+	<link href="http://www.appboxjs.com/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="http://www.appboxjs.com/assets/css/bootstrap-responsive.css" rel="stylesheet">
+</head>
+<script type="text/javascript">
+
+// Saves options to localStorage.
+function save_options() {
+  var app_id = document.getElementById("app_id").value;
+  localStorage["app_id"] = app_id;
+
+  var secret = document.getElementById("secret").value;
+  localStorage['secret'] = secret;
+}
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+  var app_id = localStorage["app_id"];
+  document.getElementById("app_id").value = app_id;
+
+  var secret = localStorage["secret"];
+  document.getElementById("secret").value = secret;
+
+  
+}
+
+</script>
+
+<body onload="restore_options()">
+	<div class="container">
+	<h2>Appbox Credentials</h2>
+	<form class="well">
+		<fieldset>
+			<label>Application ID (app_id):</label>
+			<input class="input-xlarge" id="app_id"></input>
+			
+			<label>Secret:</label>
+			<input class="input-xlarge" id="secret"></input>
+		</fieldset>
+		<button class="btn btn-primary" onclick="save_options()">Save</button>
+	</form>
+	</div>
+</body>
+</html>

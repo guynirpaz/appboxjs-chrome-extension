@@ -1,0 +1,113 @@
+<html>
+	<head>
+		<title>Send a new message</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+		<!-- Le styles -->
+	   	<link href="http://www.appboxjs.com/assets/css/bootstrap.css" rel="stylesheet">
+		<link href="http://www.appboxjs.com/assets/css/extra.css" rel="stylesheet">
+	    <link href="http://www.appboxjs.com/assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+	</head>
+	<body>
+		<script>
+			$('document').ready(function(){
+				var app_id = localStorage['app_id'];
+				var secret = localStorage['secret'];
+				if ((undefined === app_id || app_id.length === 0) || (undefined === secret)) {
+					$('#main').html('<p style="width: 200px;">please update your options first...</p>');
+				} else {
+					$('#app_id').val(app_id);
+					$('#secret').val(secret);
+				}
+				var options_url = chrome.extension.getURL("options.html");
+				$("#options").attr("href", options_url);
+			});
+		</script>
+		<div class="container" id="main">
+		<form id="appbox_form" class="well">
+			<div class="row">
+
+				<fieldset class="control-group" id="receiver">
+					<label>To: </label>
+					<input type='text' name='receiver_id' class="focused"/>
+					<span class="help-inline">user id</span>
+				</fieldset>
+				
+				<fieldset class="control-group" id="from">
+					<label>From:</label>
+					<input  type='text' name='sender_name'/>
+					<span class="help-inline">your name in message signature</span>
+				</fieldset>
+			
+				<fieldset class="control-group" id="message">
+					<label>Content:</label>
+					<textarea style="width:480px;" rows="8" id="ta" name='content' placeholder="type in the content of the message..."></textarea>
+				</fieldset>
+		
+			
+				<label></label><button id="send" data-loading-text="Sending..." class="btn-primary">Send Appbox Message</button>
+			</div>
+					<input type="hidden" name="app_id" id="app_id" />
+					<input type="hidden" name="secret" id="secret" />
+			</fieldset>
+			</div>
+			</div>
+		</form>
+		</div> <!-- main -->
+		<div class="container">
+			<div id="status" class="alert fade in" style="display:none;">
+				Message was sent - OK!
+			</div>
+		</div>
+		<div class="footer container">
+			<a href="#" id="options">Setup Options</a>
+		</div>
+
+		<script>
+			$('#send').click(function () {
+				$('#send').button('loading');
+				
+				if (0 == $('[name=receiver_id]').val().length) {
+					$('#receiver').addClass('error');
+					setTimeout(function() {
+						$('#receiver').removeClass('error');
+					}, 2000);
+				}
+				
+				if (0 == $('[name=sender_name]').val()) {
+					$('#from').addClass('error');
+					setTimeout(function() {
+						$('#from').removeClass('error');
+					}, 2000);
+				}
+				
+				if ($('#ta').val().length == 0) {
+					$('#message').addClass('error');
+					setTimeout(function() {
+						$('#message').removeClass('error');
+					}, 2000);
+				}
+				
+				
+				var post_params = $('#appbox_form').serialize();
+				$.post ('http://www.appboxjs.com/api/v1/appbox/admin/new_message/', post_params, new function(data){
+					$('#send').button('reset');
+					$('[name=receiver_id]').val("").focus();
+					$('[name=sender_name]').val("");
+					$('#ta').val("");
+					$('#status').addClass('alert-info');
+					$('#status').show();
+					$('#status').alert();
+					var t = setTimeout(function () { $('#status').fadeOut(); }, 3000);
+					// cancel(t);
+				});
+				return false;
+			});
+				
+		</script>
+		
+		<script src="http://www.appboxjs.com/assets/js/bootstrap-button.js" type="text/javascript"></script>
+		<script src="http://www.appboxjs.com/assets/js/bootstrap-alert.js" type="text/javascript"></script>
+		
+	</body>
+</html>

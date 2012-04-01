@@ -1,0 +1,14 @@
+{
+  "name": "Appbox Extension",
+  "version": "1.0",
+  "description": "Send Appbox messages right from your browser",
+  "options_page": "options.html",
+  "browser_action": {
+    "default_icon": "icon.png",
+	"popup": "popup.html"
+  },
+  "permissions": [
+    "http://www.appboxjs.com/",
+	"http://localhost/"
+  ]
+}
