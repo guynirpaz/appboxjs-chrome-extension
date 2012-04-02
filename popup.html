@@ -18,9 +18,12 @@
 				} else {
 					$('#app_id').val(app_id);
 					$('#secret').val(secret);
-				}
-				var options_url = chrome.extension.getURL("options.html");
-				$("#options").attr("href", options_url);
+				}				
+				$('#options').click(function(){
+					chrome.tabs.create({'url': chrome.extension.getURL('options.html')}, function(tab) {
+					  // Tab opened.
+					});	
+				});
 			});
 		</script>
 		<div class="container" id="main">
